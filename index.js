@@ -16,6 +16,6 @@ const connectToDB = async () => {
 
 connectToDB();
 
-app.listen(PORT, () => {
+app.listen(6000, () => {
   console.log(`the server is running on ${PORT}`);
 });
