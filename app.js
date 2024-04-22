@@ -1,13 +1,17 @@
-const express=require('express')
+const express = require("express");
+const cors = require("cors");
+
+const authRouter=require('./routes/auth')
 
 
-const app=express()
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 
-app.listen(3000,()=>{
-    console.log('server is connected');
-})
 
-app.use('/',(req,res)=>{
-    return res.json('localhost 3000')
-})
+app.use('/auth',authRouter)
+module.exports=app
