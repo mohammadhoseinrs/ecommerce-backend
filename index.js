@@ -12,6 +12,12 @@ const connectToDB = async () => {
     console.log(err);
   }
 };
+
+// connectToDB();
+// app.listen(PORT, () => {
+//   console.log(`the server is running on ${PORT}`);
+// });
+
 connectToDB().then(() => {
   app.listen(PORT, () => {
     console.log(`the server is running on ${PORT}`);

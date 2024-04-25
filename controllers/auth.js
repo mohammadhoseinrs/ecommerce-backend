@@ -1,27 +1,41 @@
 const userModel = require("./../models/user");
+const { hashPassword, generateToken } = require("./../utils/helperFunctions");
 
 exports.register = async (req, res) => {
   try {
     const { fullName, email, password, confirmPassword } = req.body;
 
-
-    const isUserAvailable=await userModel.findOne({
-      $or:[{email},{fullName}]
-    })
-    console.log(isUserAvailable);
-
-    console.log('hi');
-    if(isUserAvailable){
-      return res.json('hi')
+    if (
+      fullName.length < 4 ||
+      email.length < 5 ||
+      password != confirmPassword
+    ) {
+      return res.status(400).json({
+        message: "please fill the requiremnets",
+      });
     }
 
+    const isUserAvailable = await userModel.findOne({
+      $or: [{ email }, { fullName }],
+    });
+    if (isUserAvailable) {
+      return res.json({
+        message: "the user is already exit",
+      });
+    }
+    const hashedPassword = await hashPassword(password);
+
+    const allUser = await userModel.find({});
     const newUser = await userModel.create({
       fullName,
       email,
-      password,
+      password: hashedPassword,
+      role: allUser.length > 0 ? "USER" : "ADMIN",
     });
 
-    return res.json({ newUser });
+    const token = generateToken(email);
+
+    return res.json({ newUser, token });
   } catch (err) {
     console.log(err);
   }
