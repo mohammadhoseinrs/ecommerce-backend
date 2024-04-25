@@ -3,19 +3,17 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 4000;
-const MONGOURL = process.env.MONGO_URL || "mongodb://localhost:27017/ecommerce";
 
 const connectToDB = async () => {
   try {
-    await mongoose.connect(MONGOURL);
+    await mongoose.connect(process.env.MONGO_URL);
     console.log("database is connected");
   } catch (err) {
     console.log(err);
   }
 };
-
-connectToDB();
-
-app.listen(6000, () => {
-  console.log(`the server is running on ${PORT}`);
+connectToDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`the server is running on ${PORT}`);
+  });
 });
